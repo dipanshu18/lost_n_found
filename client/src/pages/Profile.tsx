@@ -25,7 +25,7 @@ export default function Profile() {
     <>
       <Navbar />
       {/*<!-- Component: Card with form --> */}
-      <form className="my-10 max-w-xl mx-auto overflow-hidden rounded bg-white text-slate-500 shadow-md shadow-slate-200">
+      <form className="my-10 max-w-xl mx-10 md:mx-auto overflow-hidden rounded bg-white text-slate-500 shadow-md shadow-slate-200">
         {/*  <!-- Body--> */}
         <div className="p-6">
           <header className="mb-4 text-center">
@@ -48,6 +48,23 @@ export default function Profile() {
                 className="absolute left-2 -top-2 z-[1] px-2 text-xs text-slate-400 transition-all before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full before:w-full before:bg-white before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-required:after:text-pink-500 peer-required:after:content-['\00a0*'] peer-invalid:text-pink-500 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-teal-500 peer-invalid:peer-focus:text-pink-500 peer-disabled:cursor-not-allowed peer-disabled:text-slate-400 peer-disabled:before:bg-transparent"
               >
                 Your name
+              </label>
+            </div>
+
+            {/*      <!-- Input field --> */}
+            <div className="relative mt-6">
+              <input
+                id="phoneNo"
+                type="text"
+                name="phoneNo"
+                placeholder="your phone no."
+                className="peer relative h-10 w-full rounded border border-slate-200 px-4 text-sm text-slate-500 placeholder-transparent outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-teal-500 focus:outline-none invalid:focus:border-pink-500 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
+              />
+              <label
+                htmlFor="phoneNo"
+                className="absolute left-2 -top-2 z-[1] px-2 text-xs text-slate-400 transition-all before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full before:w-full before:bg-white before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-required:after:text-pink-500 peer-required:after:content-['\00a0*'] peer-invalid:text-pink-500 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-teal-500 peer-invalid:peer-focus:text-pink-500 peer-disabled:cursor-not-allowed peer-disabled:text-slate-400 peer-disabled:before:bg-transparent"
+              >
+                Your phone no.
               </label>
             </div>
 

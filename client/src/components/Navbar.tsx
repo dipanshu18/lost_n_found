@@ -61,7 +61,7 @@ export default function Navbar() {
               <li className="flex items-center">
                 <Link to="/home/responses">
                   <button className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-teal-500 focus:bg-teal-50 focus:outline-none focus-visible:outline-none lg:px-8">
-                    <span>Responses</span>
+                    <span>Your Responses</span>
                   </button>
                 </Link>
               </li>
@@ -69,6 +69,13 @@ export default function Navbar() {
                 <Link to="/home/post">
                   <button className="flex items-center gap-2 py-4 text-teal-500 transition-colors duration-300 hover:text-teal-600 focus:bg-teal-50 focus:outline-none focus-visible:outline-none lg:px-8">
                     <span>Post</span>
+                  </button>
+                </Link>
+              </li>
+              <li className="flex items-center">
+                <Link to="/home/listings">
+                  <button className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-teal-500 focus:bg-teal-50 focus:outline-none focus-visible:outline-none lg:px-8">
+                    <span>Your Listings</span>
                   </button>
                 </Link>
               </li>

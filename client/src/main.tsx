@@ -7,10 +7,12 @@ import Landing from "./pages/Landing.tsx";
 import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import Home from "./pages/Home.tsx";
-import Responses from "./pages/Responses.tsx";
+import YourResponses from "./pages/YourResponses.tsx";
 import Post from "./pages/Post.tsx";
 import Profile from "./pages/Profile.tsx";
 import ItemDetail from "./components/ItemDetail.tsx";
+import YourListings from "./pages/YourListings.tsx";
+import UserItemDetail from "./components/UserItemDetail.tsx";
 
 const router = createBrowserRouter([
   {
@@ -31,11 +33,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/home/responses",
-    element: <Responses />,
+    element: <YourResponses />,
   },
   {
     path: "/home/post",
     element: <Post />,
+  },
+  {
+    path: "/home/listings",
+    element: <YourListings />,
   },
   {
     path: "/home/profile",
@@ -44,6 +50,10 @@ const router = createBrowserRouter([
   {
     path: "/home/itemId",
     element: <ItemDetail />,
+  },
+  {
+    path: "/home/userId/itemId",
+    element: <UserItemDetail />,
   },
 ]);
 
