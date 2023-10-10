@@ -1,12 +1,18 @@
 import { Icon } from "react-icons-kit";
 import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { eye } from "react-icons-kit/feather/eye";
-
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FormEvent, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(eyeOff);
 
@@ -20,10 +26,45 @@ export default function Login() {
     }
   };
 
+  async function handleLogin(e: FormEvent) {
+    e.preventDefault();
+
+    if (!email || !password) {
+      return toast.error("All fields are neccessary");
+    }
+
+    const credentials = { email, password };
+
+    if (credentials) {
+      try {
+        const validateUser = await axios.post(
+          "/api/auth/login",
+          JSON.stringify(credentials),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (validateUser.status === 200) {
+          toast.success("Successfully logged in");
+          navigate("/home");
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Unexpected Error");
+      }
+    }
+  }
+
   return (
     <>
       {/*<!-- Component: Card with form --> */}
-      <form className="max-w-xl mt-10 mx-10 md:mx-auto overflow-hidden rounded bg-white text-slate-500 shadow-md shadow-slate-200">
+      <form
+        onSubmit={handleLogin}
+        className="max-w-xl mt-10 mx-10 md:mx-auto overflow-hidden rounded bg-white text-slate-500 shadow-md shadow-slate-200"
+      >
         {/*  <!-- Body--> */}
         <div className="p-6">
           <header className="mb-4 text-center">
@@ -37,6 +78,10 @@ export default function Login() {
                 type="email"
                 name="email"
                 placeholder="your email"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                value={email}
                 className="peer relative h-10 w-full rounded border border-slate-200 px-4 text-sm text-slate-500 placeholder-transparent outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-teal-500 focus:outline-none invalid:focus:border-pink-500 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
               />
               <label
@@ -54,6 +99,7 @@ export default function Login() {
                 name="password"
                 placeholder="your password"
                 onChange={(e) => setPassword(e.target.value)}
+                value={password}
                 className="peer relative h-10 w-full rounded border border-slate-200 px-4 pr-12 text-sm text-slate-500 placeholder-transparent outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-teal-500 focus:outline-none invalid:focus:border-pink-500 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
               />
               <label
@@ -88,6 +134,8 @@ export default function Login() {
         </div>
       </form>
       {/*<!-- End Card with form --> */}
+
+      <ToastContainer autoClose={5000} />
     </>
   );
 }

@@ -1,8 +1,24 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { FormEvent, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Navbar() {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
+
+  const navigate = useNavigate();
+
+  async function handleLogout(e: FormEvent) {
+    e.preventDefault();
+
+    try {
+      const request = await axios.post("/api/auth/logout");
+      if (request.status === 200) {
+        navigate("/");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <>
@@ -88,11 +104,12 @@ export default function Navbar() {
               </li>
             </ul>
             <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
-              <Link to="/">
-                <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-teal-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-teal-200 transition duration-300 hover:bg-teal-600 hover:shadow-sm hover:shadow-teal-200 focus:bg-teal-700 focus:shadow-sm focus:shadow-teal-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-teal-300 disabled:bg-teal-300 disabled:shadow-none">
-                  <span>Log out</span>
-                </button>
-              </Link>
+              <button
+                onClick={handleLogout}
+                className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-teal-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-teal-200 transition duration-300 hover:bg-teal-600 hover:shadow-sm hover:shadow-teal-200 focus:bg-teal-700 focus:shadow-sm focus:shadow-teal-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-teal-300 disabled:bg-teal-300 disabled:shadow-none"
+              >
+                <span>Log out</span>
+              </button>
             </div>
           </nav>
         </div>

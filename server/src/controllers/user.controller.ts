@@ -6,10 +6,18 @@ import jwt from "jsonwebtoken";
 const userClient = new PrismaClient().user;
 const secretKey = "bMJKWMp";
 
+// export async function getUserProfile(req: Request, res: Response) {
+//   try {
+
+//   }
+// }
+
 export async function userSignup(req: Request, res: Response) {
   try {
     const { name, email, phoneNo, password } = req.body;
-    const hashedPassword = await hashPassword(password);
+
+    console.log(name, email, phoneNo, password);
+
     if (!name || !email || !phoneNo || !password) {
       res.status(401).json({ error: "Please enter all the details" });
     }
@@ -24,6 +32,7 @@ export async function userSignup(req: Request, res: Response) {
       return res.status(400).json({ msg: "User already exists" });
     }
 
+    const hashedPassword = await hashPassword(password);
     const newUser = await userClient.create({
       data: {
         name,
@@ -32,6 +41,8 @@ export async function userSignup(req: Request, res: Response) {
         password: hashedPassword,
       },
     });
+
+    console.log(newUser);
 
     const token = jwt.sign({ userId: newUser.id }, secretKey);
     res.cookie("token", token, { httpOnly: true });

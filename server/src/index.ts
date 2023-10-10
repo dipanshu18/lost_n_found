@@ -19,9 +19,7 @@ app.use("/api/user", userRouter);
 
 app.use("/api/auth", authRouter);
 
-app.use("/api", itemRouter);
-
-app.use(verifyToken);
+app.use("/api", verifyToken, itemRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started at port ${PORT}`);
