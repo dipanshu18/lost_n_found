@@ -6,10 +6,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Spinner from "../components/Spinner";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -37,6 +40,7 @@ export default function Login() {
 
     if (credentials) {
       try {
+        setLoading(true);
         const validateUser = await axios.post(
           "/api/auth/login",
           JSON.stringify(credentials),
@@ -123,6 +127,12 @@ export default function Login() {
             <span>Log in</span>
           </button>
         </div>
+
+        {loading && (
+          <div className="flex justify-center">
+            <Spinner />
+          </div>
+        )}
 
         <div className="my-4 mx-4">
           <p>

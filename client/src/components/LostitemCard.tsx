@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
-export default function LostItemCard() {
+export default function LostItemCard({ item }) {
   return (
     <>
       {/*<!-- Component: Basic image card --> */}
@@ -8,7 +9,7 @@ export default function LostItemCard() {
         {/*  <!--  Image --> */}
         <figure>
           <img
-            src="https://picsum.photos/id/69/800/600"
+            src={item.imageUrl}
             alt="card image"
             className="aspect-video w-full"
           />
@@ -18,10 +19,14 @@ export default function LostItemCard() {
           <header className="">
             <Link to="/home/itemId">
               <h3 className="text-xl font-medium text-slate-700">
-                Memories of the past
+                {item.name}
               </h3>
             </Link>
-            <p className="text-sm text-slate-400"> By George, jun 3 2023</p>
+            <p className="text-sm text-slate-400">
+              {formatDistanceToNow(new Date(item.updatedAt), {
+                addSuffix: true,
+              })}
+            </p>
           </header>
         </div>
       </div>

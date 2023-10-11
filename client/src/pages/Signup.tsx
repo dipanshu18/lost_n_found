@@ -173,18 +173,18 @@ export default function Signup() {
           </div>
         </div>
 
-        {(
-          <div className="flex justify-center">
-            <Spinner />{" "}
-          </div>
-        ) && loading}
-
         {/*  <!-- Action base sized basic button --> */}
         <div className="flex justify-end p-6 ">
           <button className="inline-flex h-10 w-full items-center justify-center gap-2 whitespace-nowrap rounded bg-teal-500 px-5 text-sm font-medium tracking-wide text-white transition duration-300 hover:bg-teal-600 focus:bg-teal-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-teal-300 disabled:bg-teal-300 disabled:shadow-none">
             <span>Sign up</span>
           </button>
         </div>
+
+        {loading && (
+          <div className="flex justify-center">
+            <Spinner />
+          </div>
+        )}
 
         <div className="my-4 mx-4">
           <p>

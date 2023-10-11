@@ -1,22 +1,26 @@
+import { verifyToken } from "../middlewares/auth.middleware";
 import {
   createItemPost,
   deleteItemPost,
   editItemPost,
   getItem,
   getItems,
+  getUserItems,
 } from "../controllers/item.controller";
 import { Router } from "express";
 
 const itemRouter = Router();
 
-itemRouter.get("/items", getItems);
+itemRouter.get("/items", verifyToken, getItems);
 
-itemRouter.get("/item/:id", getItem);
+itemRouter.get("/user/items", verifyToken, getUserItems);
 
-itemRouter.post("/item", createItemPost);
+itemRouter.get("/item/:id", verifyToken, getItem);
 
-itemRouter.put("/item/:id", editItemPost);
+itemRouter.post("/item", verifyToken, createItemPost);
 
-itemRouter.delete("/item/:id", deleteItemPost);
+itemRouter.put("/item/:id", verifyToken, editItemPost);
+
+itemRouter.delete("/item/:id", verifyToken, deleteItemPost);
 
 export default itemRouter;
