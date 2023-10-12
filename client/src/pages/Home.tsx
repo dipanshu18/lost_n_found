@@ -25,12 +25,12 @@ export default function Home() {
   return (
     <>
       <Navbar />
+      {loading && (
+        <div className="flex my-20 justify-center items-center">
+          <Spinner />
+        </div>
+      )}
       <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-        {loading && (
-          <div className="flex justify-center">
-            <Spinner />
-          </div>
-        )}
         {lostItems &&
           lostItems.map((lostItem) => (
             <LostItemCard key={lostItem.id} item={lostItem} />

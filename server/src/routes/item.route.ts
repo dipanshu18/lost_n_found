@@ -6,6 +6,7 @@ import {
   getItem,
   getItems,
   getUserItems,
+  getUserItem,
 } from "../controllers/item.controller";
 import { Router } from "express";
 
@@ -14,6 +15,8 @@ const itemRouter = Router();
 itemRouter.get("/items", verifyToken, getItems);
 
 itemRouter.get("/user/items", verifyToken, getUserItems);
+
+itemRouter.get("/user/item/:id", verifyToken, getUserItem);
 
 itemRouter.get("/item/:id", verifyToken, getItem);
 

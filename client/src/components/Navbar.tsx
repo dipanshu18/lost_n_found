@@ -75,7 +75,7 @@ export default function Navbar() {
               }`}
             >
               <li className="flex items-center">
-                <Link to="/home/responses">
+                <Link to="/home/your-responses">
                   <button className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-teal-500 focus:bg-teal-50 focus:outline-none focus-visible:outline-none lg:px-8">
                     <span>Your Responses</span>
                   </button>
@@ -89,7 +89,7 @@ export default function Navbar() {
                 </Link>
               </li>
               <li className="flex items-center">
-                <Link to="/home/listings">
+                <Link to="/home/your-listings">
                   <button className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-teal-500 focus:bg-teal-50 focus:outline-none focus-visible:outline-none lg:px-8">
                     <span>Your Listings</span>
                   </button>

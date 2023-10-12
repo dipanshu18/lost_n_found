@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: "/home/responses",
+    path: "/home/your-responses",
     element: <YourResponses />,
   },
   {
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
     element: <Post />,
   },
   {
-    path: "/home/listings",
+    path: "/home/your-listings",
     element: <YourListings />,
   },
   {
@@ -48,11 +48,11 @@ const router = createBrowserRouter([
     element: <Profile />,
   },
   {
-    path: "/home/itemId",
+    path: "/home/:itemId",
     element: <ItemDetail />,
   },
   {
-    path: "/home/userId/itemId",
+    path: "/home/:userId/:itemId",
     element: <UserItemDetail />,
   },
 ]);

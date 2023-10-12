@@ -54,6 +54,11 @@ export default function Post() {
       if (itemPost.status === 200) {
         setLoading(false);
         toast.success("Item Post created successfully");
+        setName("");
+        setDescription("");
+        setLostLocation("");
+        setImageUrl("");
+        setValidatingQuestion("");
       }
     } catch (err) {
       setLoading(false);

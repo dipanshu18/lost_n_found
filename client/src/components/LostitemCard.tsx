@@ -17,7 +17,7 @@ export default function LostItemCard({ item }) {
         {/*  <!-- Body--> */}
         <div className="p-6">
           <header className="">
-            <Link to="/home/itemId">
+            <Link to={`/home/${item.id}`}>
               <h3 className="text-xl font-medium text-slate-700">
                 {item.name}
               </h3>

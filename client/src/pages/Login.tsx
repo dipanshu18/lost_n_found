@@ -56,6 +56,7 @@ export default function Login() {
           navigate("/home");
         }
       } catch (err) {
+        setLoading(false);
         console.error(err);
         toast.error("Unexpected Error");
       }

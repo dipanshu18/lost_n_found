@@ -37,8 +37,44 @@ export async function getUserItems(req: Request, res: Response) {
   }
 }
 
-export function getItem(req: Request, res: Response) {
-  res.json({ msg: "An Item Details" });
+export async function getUserItem(req: Request, res: Response) {
+  const { userId } = req.body;
+  const { id } = req.params;
+
+  try {
+    const userPost = await itemClient.findUnique({
+      where: {
+        ownerId: userId,
+        id,
+      },
+    });
+
+    if (userPost) {
+      res.status(200).json(userPost);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function getItem(req: Request, res: Response) {
+  const { id } = req.params;
+
+  try {
+    const postDetail = await itemClient.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (postDetail) {
+      res.status(200).json(postDetail);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 }
 
 export async function createItemPost(req: Request, res: Response) {
@@ -66,10 +102,72 @@ export async function createItemPost(req: Request, res: Response) {
   }
 }
 
-export function editItemPost(req: Request, res: Response) {
-  res.json({ msg: "Updating the item details" });
+export async function editItemPost(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
+    const updatedInfo = req.body;
+
+    const post = await itemClient.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!post) {
+      return res.status(404).json({ msg: "No item found with that ID" });
+    }
+
+    const updatedPost = await itemClient.update({
+      where: {
+        id,
+      },
+      data: {
+        id,
+        ownerId: userId,
+        name: updatedInfo.name,
+        description: updatedInfo.description,
+        lostLocation: updatedInfo.lostLocation,
+        imageUrl: updatedInfo.imageUrl,
+      },
+    });
+
+    if (updatedPost) {
+      res.status(201).json(updatedPost);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 }
 
-export function deleteItemPost(req: Request, res: Response) {
-  res.json({ msg: "Deleting the Item Post" });
+export async function deleteItemPost(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
+
+    const post = await itemClient.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!post) {
+      return res.status(404).json({ msg: "No item found with that ID" });
+    }
+
+    const deletedPost = await itemClient.delete({
+      where: {
+        id,
+        ownerId: userId,
+      },
+    });
+
+    if (deletedPost) {
+      res.status(200).json({ msg: "Deleted successfully" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 }

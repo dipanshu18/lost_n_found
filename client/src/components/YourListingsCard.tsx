@@ -17,7 +17,7 @@ export default function YourListingsCard({ post }) {
         {/*  <!-- Body--> */}
         <div className="p-6">
           <header className="">
-            <Link to="/home/userId/itemId">
+            <Link to={`/home/${post.ownerId}/${post.id}`}>
               <h3 className="text-xl font-medium text-slate-700">
                 {post.name}
               </h3>
