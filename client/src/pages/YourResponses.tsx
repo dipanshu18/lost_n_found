@@ -31,7 +31,7 @@ export default function YourResponses() {
         </div>
       )}
 
-      <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-10">
+      <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
         {userResponses &&
           userResponses.map((userResponse) => (
             <YourResponseCard key={userResponse.id} response={userResponse} />

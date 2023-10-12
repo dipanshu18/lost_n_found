@@ -77,6 +77,7 @@ export async function getItem(req: Request, res: Response) {
       include: {
         owner: {
           select: {
+            id: true,
             name: true,
           },
         },

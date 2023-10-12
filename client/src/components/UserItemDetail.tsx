@@ -51,6 +51,8 @@ export default function UserItemDetail() {
     fetchItemDetail();
   }, []);
 
+  console.log(gottenResponses);
+
   async function handlePostUpdate(e: FormEvent) {
     e.preventDefault();
 
@@ -201,7 +203,7 @@ export default function UserItemDetail() {
         {/*  <!-- Body--> */}
         <div className="lg:p-6 lg:col-span-1">
           <header className="">
-            <h3 className="mb-4 text-5xl font-medium text-slate-700">{name}</h3>
+            <h3 className="mb-4 text-5xl font-bold text-slate-700">{name}</h3>
             <p className="mb-4 text-lg text-slate-500">{description}</p>
 
             <p className="mb-4 font-semibold text-xl text-slate-400">
@@ -398,10 +400,10 @@ export default function UserItemDetail() {
       {/*<!-- End Basic image card --> */}
 
       <div>
-        <h1 className="mb-4 text-center text-3xl font-medium text-slate-700">
+        <h1 className="mb-4 text-center text-3xl font-extrabold text-slate-700">
           Gotten Responses
         </h1>
-        <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-10">
+        <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
           {gottenResponses &&
             gottenResponses.map((gottenResponse) => (
               <GottenResponseCard

@@ -10,20 +10,39 @@ import Spinner from "./Spinner";
 export default function ItemDetail() {
   const [isShowing, setIsShowing] = useState(false);
 
+  const [userId, setUserId] = useState("");
   const { itemId } = useParams();
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [lostLocation, setLostLocation] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [owner, setOwner] = useState("");
+  const [ownerId, setOwnerId] = useState("");
   const [validatingQuestion, setValidatingQuestion] = useState("");
   const [answer, setAnswer] = useState("");
-  const [hideFoundButton, setHideFoundButton] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [responseLoading, setResponseLoading] = useState(false);
+  const [alreadyResponded, setAlreadyResponded] = useState([]);
 
   useEffect(() => {
+    async function fetchcurrentUserId() {
+      const requestUserId = await axios.get("/api/user/userId");
+
+      if (requestUserId.status === 200) {
+        setUserId(requestUserId.data);
+      }
+    }
+
+    async function fetchResponded() {
+      const requestResponse = await axios.get(`/api/user/response/${itemId}`);
+
+      if (requestResponse.status === 200) {
+        setAlreadyResponded(requestResponse.data);
+      }
+    }
+
     async function fetchItemDetails() {
       setLoading(true);
       const request = await axios.get(`/api/item/${itemId}`);
@@ -36,9 +55,12 @@ export default function ItemDetail() {
         setImageUrl(request.data.imageUrl);
         setOwner(request.data.owner.name);
         setValidatingQuestion(request.data.validatingQuestion);
+        setOwnerId(request.data.owner.id);
       }
     }
 
+    fetchcurrentUserId();
+    fetchResponded();
     fetchItemDetails();
   }, []);
 
@@ -58,7 +80,6 @@ export default function ItemDetail() {
 
       if (request.status === 200) {
         setResponseLoading(false);
-        setHideFoundButton(true);
         toast.success("Responded successfully");
       }
     } catch (err) {
@@ -178,14 +199,18 @@ export default function ItemDetail() {
               Lost Location: {lostLocation}
             </p>
 
-            {!hideFoundButton && (
-              <button
-                onClick={() => setIsShowing(true)}
-                className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-teal-500 px-5 text-sm font-medium tracking-wide text-white transition duration-300 hover:bg-teal-600 focus:bg-teal-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-teal-300 disabled:bg-teal-300 disabled:shadow-none"
-              >
-                <span>Found</span>
-              </button>
-            )}
+            {ownerId !== userId &&
+              !alreadyResponded.some(
+                (response) =>
+                  response.founderId === userId && response.postId === itemId
+              ) && (
+                <button
+                  onClick={() => setIsShowing(true)}
+                  className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-teal-500 px-5 text-sm font-medium tracking-wide text-white transition duration-300 hover:bg-teal-600 focus:bg-teal-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-teal-300 disabled:bg-teal-300 disabled:shadow-none"
+                >
+                  <span>Found</span>
+                </button>
+              )}
 
             {isShowing && typeof document !== "undefined"
               ? ReactDOM.createPortal(
@@ -193,7 +218,7 @@ export default function ItemDetail() {
                     className="fixed top-0 left-0 z-20 flex h-screen w-screen items-center justify-center bg-slate-300/20 backdrop-blur-sm"
                     aria-labelledby="header-3a content-3a"
                     aria-modal="true"
-                    tabindex="-1"
+                    tabIndex="-1"
                     role="dialog"
                   >
                     {/*    <!-- Modal --> */}

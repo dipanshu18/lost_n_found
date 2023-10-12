@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import Spinner from "./Spinner";
-
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -25,6 +25,8 @@ export default function GottenResponseCard({ response }) {
     }
   }
 
+  console.log(response);
+
   return (
     <>
       {/*<!-- Component: Basic card --> */}
@@ -46,6 +48,16 @@ export default function GottenResponseCard({ response }) {
             </div>
           )}
           {/*<!-- End Large primary basic button --> */}
+
+          <h5 className="text-md my-6 font-medium text-gray-700">
+            By <span className="text-emerald-600">{response.founder.name}</span>
+          </h5>
+
+          <p className="text-sm text-gray-500">
+            {formatDistanceToNow(new Date(response.updatedAt), {
+              addSuffix: true,
+            })}
+          </p>
 
           {loading && (
             <div className="flex justify-center">

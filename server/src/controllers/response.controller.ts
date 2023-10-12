@@ -12,9 +12,48 @@ export async function getUserResponses(req: Request, res: Response) {
       where: {
         founderId: userId,
       },
+      select: {
+        validatingQuestion: true,
+        answer: true,
+        approved: true,
+        updatedAt: true,
+        post: {
+          select: {
+            name: true,
+            imageUrl: true,
+            owner: {
+              select: {
+                name: true,
+                phoneNo: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     res.status(200).json(userResponses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+}
+
+export async function getAResponse(req: Request, res: Response) {
+  const { postId } = req.params;
+  const { userId } = req.body;
+
+  try {
+    const response = await responseClient.findMany({
+      where: {
+        founderId: userId,
+        postId,
+      },
+    });
+
+    if (response) {
+      res.status(200).json(response);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Internal Server Error" });
@@ -36,6 +75,22 @@ export async function getItemResponses(req: Request, res: Response) {
     const postResponses = await responseClient.findMany({
       where: {
         postId: itemId,
+      },
+      select: {
+        founder: {
+          select: {
+            name: true,
+            email: true,
+            phoneNo: true,
+          },
+        },
+        id: true,
+        postId: true,
+        validatingQuestion: true,
+        answer: true,
+        approved: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
 
