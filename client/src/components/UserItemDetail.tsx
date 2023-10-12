@@ -16,10 +16,13 @@ export default function UserItemDetail() {
   const [lostLocation, setLostLocation] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [validatingQuestion, setValidatingQuestion] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
 
   const [isShowing, setIsShowing] = useState(false);
+
+  const [gottenResponses, setGottenResponses] = useState([]);
 
   useEffect(() => {
     async function fetchItemDetail() {
@@ -36,6 +39,15 @@ export default function UserItemDetail() {
       }
     }
 
+    async function fetchGottenResponses() {
+      const responses = await axios.get(`/api/response/${itemId}`);
+
+      if (responses.status === 200) {
+        setGottenResponses(responses.data);
+      }
+    }
+
+    fetchGottenResponses();
     fetchItemDetail();
   }, []);
 
@@ -389,13 +401,14 @@ export default function UserItemDetail() {
         <h1 className="mb-4 text-center text-3xl font-medium text-slate-700">
           Gotten Responses
         </h1>
-        <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          <GottenResponseCard />
-          <GottenResponseCard />
-          <GottenResponseCard />
-          <GottenResponseCard />
-          <GottenResponseCard />
-          <GottenResponseCard />
+        <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-10">
+          {gottenResponses &&
+            gottenResponses.map((gottenResponse) => (
+              <GottenResponseCard
+                key={gottenResponse.id}
+                response={gottenResponse}
+              />
+            ))}
         </div>
       </div>
     </>

@@ -1,18 +1,27 @@
-import ReactDOM from "react-dom";
-import Navbar from "./Navbar";
-
 import { useState, useRef, useEffect, FormEvent } from "react";
-import axios from "axios";
+import ReactDOM from "react-dom";
 import { useParams } from "react-router-dom";
+import Navbar from "./Navbar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 import Spinner from "./Spinner";
 
 export default function ItemDetail() {
   const [isShowing, setIsShowing] = useState(false);
 
   const { itemId } = useParams();
-  const [itemDetails, setItemDetails] = useState([]);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [lostLocation, setLostLocation] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [owner, setOwner] = useState("");
+  const [validatingQuestion, setValidatingQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [hideFoundButton, setHideFoundButton] = useState(false);
 
   const [loading, setLoading] = useState(false);
+  const [responseLoading, setResponseLoading] = useState(false);
 
   useEffect(() => {
     async function fetchItemDetails() {
@@ -21,12 +30,42 @@ export default function ItemDetail() {
 
       if (request.status === 200) {
         setLoading(false);
-        setItemDetails(request.data);
+        setName(request.data.name);
+        setDescription(request.data.description);
+        setLostLocation(request.data.lostLocation);
+        setImageUrl(request.data.imageUrl);
+        setOwner(request.data.owner.name);
+        setValidatingQuestion(request.data.validatingQuestion);
       }
     }
 
     fetchItemDetails();
   }, []);
+
+  async function handleResponse(e: FormEvent) {
+    e.preventDefault();
+    try {
+      setResponseLoading(true);
+      const request = await axios.post(
+        `/api/response/${itemId}`,
+        JSON.stringify({ answer }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (request.status === 200) {
+        setResponseLoading(false);
+        setHideFoundButton(true);
+        toast.success("Responded successfully");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Internal Server Error");
+    }
+  }
 
   const wrapperRef = useRef(null);
 
@@ -123,7 +162,7 @@ export default function ItemDetail() {
         {/*  <!--  Image --> */}
         <figure className="lg:col-span-2">
           <img
-            src={itemDetails.imageUrl}
+            src={imageUrl}
             alt="card image"
             className="aspect-video w-full  rounded-xl"
           />
@@ -131,21 +170,22 @@ export default function ItemDetail() {
         {/*  <!-- Body--> */}
         <div className="lg:p-6 lg:col-span-1">
           <header className="">
-            <h3 className="mb-4 text-5xl font-medium text-slate-700">
-              {itemDetails.name}
-            </h3>
-            <p className="text-lg text-slate-500">{itemDetails.description}</p>
-            <p className="mb-4 font-semibold text-xl text-slate-400">
+            <h3 className="text-5xl mb-4 font-medium text-slate-700">{name}</h3>
+            <p className="text-lg text-slate-500">{description}</p>
+            <h5 className="text-lg font-medium text-emerald-600">By {owner}</h5>
+            <p className="mb-4 font-semibold text-xl text-slate-600">
               <br />
-              Lost Location: {itemDetails.lostLocation}
+              Lost Location: {lostLocation}
             </p>
 
-            <button
-              onClick={() => setIsShowing(true)}
-              className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-teal-500 px-5 text-sm font-medium tracking-wide text-white transition duration-300 hover:bg-teal-600 focus:bg-teal-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-teal-300 disabled:bg-teal-300 disabled:shadow-none"
-            >
-              <span>Found</span>
-            </button>
+            {!hideFoundButton && (
+              <button
+                onClick={() => setIsShowing(true)}
+                className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-teal-500 px-5 text-sm font-medium tracking-wide text-white transition duration-300 hover:bg-teal-600 focus:bg-teal-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-teal-300 disabled:bg-teal-300 disabled:shadow-none"
+              >
+                <span>Found</span>
+              </button>
+            )}
 
             {isShowing && typeof document !== "undefined"
               ? ReactDOM.createPortal(
@@ -203,12 +243,15 @@ export default function ItemDetail() {
                       {/*        <!-- Modal body --> */}
                       <div id="content-3a" className="flex-1 overflow-auto">
                         {/*<!-- Component: Card with form --> */}
-                        <form className="max-w-xl mb-10 mx-10 md:mx-auto overflow-hidden bg-white text-slate-500">
+                        <form
+                          onSubmit={handleResponse}
+                          className="max-w-xl mb-10 mx-10 md:mx-auto overflow-hidden bg-white text-slate-500"
+                        >
                           {/*  <!-- Body--> */}
                           <div className="p-6">
                             <div className="flex flex-col space-y-4">
                               <p className="text-md mt-2 text-slate-700">
-                                {itemDetails.validatingQuestion}
+                                {validatingQuestion}
                               </p>
                               {/*      <!-- Input field --> */}
                               <div className="relative mb-6">
@@ -217,6 +260,10 @@ export default function ItemDetail() {
                                   type="text"
                                   name="answer"
                                   placeholder="your answer"
+                                  onChange={(e) => {
+                                    setAnswer(e.target.value);
+                                  }}
+                                  value={answer}
                                   className="peer relative h-10 w-full rounded border border-slate-200 px-4 text-sm text-slate-500 placeholder-transparent outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-teal-500 focus:outline-none invalid:focus:border-pink-500 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
                                 />
                                 <label
@@ -228,6 +275,13 @@ export default function ItemDetail() {
                               </div>
                             </div>
                           </div>
+
+                          {responseLoading && (
+                            <div className="flex justify-center">
+                              <Spinner />
+                            </div>
+                          )}
+
                           {/*  <!-- Action base sized basic button --> */}
                           <div className="flex justify-end p-2 ">
                             <button className="inline-flex h-10 max-w-md mx-auto items-center justify-center gap-2 whitespace-nowrap rounded bg-teal-500 px-5 text-sm font-medium tracking-wide text-white transition duration-300 hover:bg-teal-600 focus:bg-teal-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-teal-300 disabled:bg-teal-300 disabled:shadow-none">
@@ -238,6 +292,8 @@ export default function ItemDetail() {
                         {/*<!-- End Card with form --> */}
                       </div>
                     </div>
+
+                    <ToastContainer autoClose={5000} />
                   </div>,
                   document.body
                 )

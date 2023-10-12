@@ -5,7 +5,15 @@ const itemClient = new PrismaClient().post;
 
 export async function getItems(req: Request, res: Response) {
   try {
-    const allPosts = await itemClient.findMany();
+    const allPosts = await itemClient.findMany({
+      include: {
+        owner: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
 
     if (!allPosts) {
       return res.status(404).json({ msg: "No items listed" });
@@ -66,11 +74,16 @@ export async function getItem(req: Request, res: Response) {
       where: {
         id,
       },
+      include: {
+        owner: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
-    if (postDetail) {
-      res.status(200).json(postDetail);
-    }
+    res.status(200).json(postDetail);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal server error" });

@@ -5,32 +5,35 @@ export default function LostItemCard({ item }) {
   return (
     <>
       {/*<!-- Component: Basic image card --> */}
-      <div className="overflow-hidden rounded bg-white text-slate-500 shadow-md shadow-slate-200">
-        {/*  <!--  Image --> */}
-        <figure>
-          <img
-            src={item.imageUrl}
-            alt="card image"
-            className="aspect-video w-full"
-          />
-        </figure>
-        {/*  <!-- Body--> */}
-        <div className="p-6">
-          <header className="">
-            <Link to={`/home/${item.id}`}>
-              <h3 className="text-xl font-medium text-slate-700">
+      <Link to={`/home/${item.id}`}>
+        <div className="overflow-hidden rounded bg-white text-slate-500 border-slate-100 shadow-xl shadow-slate-200">
+          {/*  <!--  Image --> */}
+          <figure>
+            <img
+              src={item.imageUrl}
+              alt="card image"
+              className="aspect-video w-full"
+            />
+          </figure>
+          {/*  <!-- Body--> */}
+          <div className="p-6">
+            <header className="">
+              <h3 className="text-2xl font-medium text-slate-700">
                 {item.name}
               </h3>
-            </Link>
-            <p className="text-sm text-slate-400">
-              {formatDistanceToNow(new Date(item.updatedAt), {
-                addSuffix: true,
-              })}
-            </p>
-          </header>
+              <h5 className="text-md font-medium text-emerald-600">
+                By {item.owner.name}
+              </h5>
+              <p className="text-sm text-gray-500">
+                {formatDistanceToNow(new Date(item.updatedAt), {
+                  addSuffix: true,
+                })}
+              </p>
+            </header>
+          </div>
         </div>
-      </div>
-      {/*<!-- End Basic image card --> */}
+        {/*<!-- End Basic image card --> */}
+      </Link>
     </>
   );
 }

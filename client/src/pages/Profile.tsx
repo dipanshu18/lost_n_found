@@ -58,6 +58,7 @@ export default function Profile() {
         toast.success("Updated Info successfully");
       }
     } catch (err) {
+      setLoading(false);
       console.error(err);
       toast.error("Unexpected Error");
     }
