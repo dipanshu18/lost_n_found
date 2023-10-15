@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import transporter from "../utils/emails/email";
 
 const postClient = new PrismaClient().post;
 const responseClient = new PrismaClient().response;
@@ -156,6 +157,55 @@ export async function approveResponse(req: Request, res: Response) {
         approved: true,
       },
     });
+
+    const PostDetails = await postClient.findUnique({
+      where: {
+        id: itemId,
+      },
+      select: {
+        name: true,
+        owner: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    const founderDetails = await responseClient.findUnique({
+      where: {
+        id: responseId,
+      },
+      select: {
+        founder: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    console.log(founderDetails);
+
+    if (response) {
+      const confirmationMail = await transporter.sendMail({
+        from: `"Lost and Found" <noreply.Landf@gmail.com>`, // sender address
+        to: `${founderDetails?.founder.email}`, // list of receivers
+        subject: `Hey ${founderDetails?.founder.name}, your response is approved by ${PostDetails?.owner.name}!`, // Subject line
+        text: `Congratulations your response is approved. Thank you for choosing Lost and Found. Your response is approved by the Owner of the item ${PostDetails?.name}, so now you can login and see the contact number of the owner to discuss how to deliver their lost belongings. Also thanks for using our app, showing patience for finding their lost belongings and we hope you deliver item as soon as possible and we appreciate that support.`,
+        html: `
+          <h1>Congratulations your response is approved.</h1>
+          <div>
+            <p>
+              <strong>Thankyou for choosing Lost and Found.</strong> Your response is approved by the Owner of the item ${PostDetails?.name}, so now you can login and see the contact number of the owner to discuss how to deliver their lost belongings. Also thanks for using our app, showing patience for finding their lost belongings and we hope you deliver item as soon as possible and we appreciate that support.
+            </p>
+          </div>
+        `,
+      });
+
+      console.log("Message sent: %s", confirmationMail.messageId);
+    }
 
     res.status(201).json(response);
   } catch (error) {

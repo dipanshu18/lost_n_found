@@ -5,7 +5,7 @@ import transporter from "../utils/emails/email";
 import jwt from "jsonwebtoken";
 
 const userClient = new PrismaClient().user;
-const secretKey = "bMJKWMp";
+const secretKey: string = process.env.SECRET || "bMJKWMp";
 
 export async function userSignup(req: Request, res: Response) {
   try {
@@ -37,11 +37,18 @@ export async function userSignup(req: Request, res: Response) {
 
     if (newUser) {
       const confirmationMail = await transporter.sendMail({
-        from: '"Dipanshu" <torawanedipanshu@gmail.com>', // sender address
+        from: `"Lost and Found" <noreply.Landf@gmail.com>`, // sender address
         to: newUser.email, // list of receivers
         subject: "Thanks for signing up!", // Subject line
-        text: "Registeration Confirmation. Thank you for choosing Lost and Found. Your account is successfully created on our web app, so now you can login and explore what we have to offer. Also we always aim to provide as much value to our users so that they have a great experience using our software and we appreciate that support.",
-        html: { path: "src/utils/emails/thankyou/index.html" },
+        text: "Registeration Confirmation. Thank you for choosing Lost and Found. Your account is successfully created on our app, so now you can login and explore what we have to offer. Also we always aim to provide as much value to our users so that they have a great experience using our software and we appreciate that support.",
+        html: `
+          <h1>Registeration Confirmation.</h1>
+          <div>
+            <p>
+              <strong>Thankyou for choosing Lost and Found.</strong> Your account is successfully created on our app, so now you can login and explore what we have to offer. Also we always aim to provide as much value to our users so that they have a great experience using our software and we appreciate that support.
+            </p>
+          </div>
+        `,
       });
 
       console.log("Message sent: %s", confirmationMail.messageId);

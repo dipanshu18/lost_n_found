@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-const secretKey = "bMJKWMp";
+const secretKey: string = process.env.SECRET || "bMJKWMp";
 
 export function verifyToken(req: Request, res: Response, next: NextFunction) {
   const token = req.cookies.token;

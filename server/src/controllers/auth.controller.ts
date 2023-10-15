@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { verifyPassword } from "../utils/hashPasswords";
 
-const secretKey = "bMJKWMp";
+const secretKey: string = process.env.SECRET || "bMJKWMp";
 
 const userClient = new PrismaClient().user;
 
