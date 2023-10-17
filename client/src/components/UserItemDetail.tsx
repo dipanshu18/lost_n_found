@@ -7,6 +7,7 @@ import axios from "axios";
 import Spinner from "./Spinner";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { gottenResponseCardProps } from "./GottenResponseCard";
 
 type UserItemDetail = {
   id: React.Key;
@@ -238,7 +239,7 @@ export default function UserItemDetail() {
                     className="fixed top-0 left-0 z-20 flex h-screen w-screen items-center justify-center bg-slate-300/20 backdrop-blur-sm"
                     aria-labelledby="header-3a content-3a"
                     aria-modal="true"
-                    tabIndex="-1"
+                    tabIndex={-1}
                     role="dialog"
                   >
                     {/*    <!-- Modal --> */}
@@ -416,7 +417,7 @@ export default function UserItemDetail() {
         </h1>
         <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
           {gottenResponses &&
-            gottenResponses.map((gottenResponse: { id: React.Key }) => (
+            gottenResponses.map((gottenResponse: gottenResponseCardProps) => (
               <GottenResponseCard
                 key={gottenResponse.id}
                 response={gottenResponse}

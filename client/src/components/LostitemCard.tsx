@@ -11,7 +11,7 @@ export type lostItemCardProps = {
   updatedAt: string;
 };
 
-export default function LostItemCard({ item }: { item: LostItemCardProps }) {
+export default function LostItemCard({ item }: { item: lostItemCardProps }) {
   return (
     <>
       {/*<!-- Component: Basic image card --> */}

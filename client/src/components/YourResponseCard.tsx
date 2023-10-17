@@ -143,7 +143,7 @@ export default function YourResponseCard({
                       className="fixed top-0 left-0 z-20 flex h-screen w-screen items-center justify-center bg-slate-300/20 backdrop-blur-sm"
                       aria-labelledby="header-2a content-2a"
                       aria-modal="true"
-                      tabIndex="-1"
+                      tabIndex={-1}
                       role="dialog"
                     >
                       {/*    <!-- Modal --> */}

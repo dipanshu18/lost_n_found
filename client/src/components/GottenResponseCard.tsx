@@ -5,7 +5,7 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export type GottenResponseCardProps = {
+export type gottenResponseCardProps = {
   id: React.Key;
   postId: React.Key;
   validatingQuestion: string;
@@ -20,7 +20,7 @@ export type GottenResponseCardProps = {
 export default function GottenResponseCard({
   response,
 }: {
-  response: GottenResponseCardProps;
+  response: gottenResponseCardProps;
 }) {
   const [loading, setLoading] = useState(false);
 
