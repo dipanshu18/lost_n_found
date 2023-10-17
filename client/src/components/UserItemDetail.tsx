@@ -21,7 +21,7 @@ type UserItemDetail = {
 export default function UserItemDetail() {
   const navigate = useNavigate();
   const { itemId } = useParams();
-  const [UserItemDetail, setUserItemDetail] = useState<UserItemDetail>();
+  const [userItemDetail, setUserItemDetail] = useState<UserItemDetail>();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -44,6 +44,11 @@ export default function UserItemDetail() {
       if (request.status === 200) {
         setLoading(false);
         setUserItemDetail(request.data);
+        setName(request.data.name);
+        setDescription(request.data.description);
+        setLostLocation(request.data.lostLocation);
+        setImageUrl(request.data.imageUrl);
+        setValidatingQuestion(request.data.validatingQuestion);
       }
     }
 
@@ -201,7 +206,7 @@ export default function UserItemDetail() {
         {/*  <!--  Image --> */}
         <figure className="lg:col-span-2">
           <img
-            src={UserItemDetail?.imageUrl}
+            src={userItemDetail?.imageUrl}
             alt="card image"
             className="aspect-video w-full  rounded-xl"
           />
@@ -210,14 +215,14 @@ export default function UserItemDetail() {
         <div className="lg:p-6 lg:col-span-1">
           <header className="">
             <h3 className="mb-4 text-5xl font-bold text-slate-700">
-              {UserItemDetail?.name}
+              {userItemDetail?.name}
             </h3>
             <p className="mb-4 text-lg text-slate-500">
-              {UserItemDetail?.description}
+              {userItemDetail?.description}
             </p>
 
             <p className="mb-4 font-semibold text-xl text-slate-400">
-              Lost Location: {UserItemDetail?.lostLocation}
+              Lost Location: {userItemDetail?.lostLocation}
             </p>
 
             {/*<!-- Component: Large secondary basic button --> */}
@@ -298,11 +303,17 @@ export default function UserItemDetail() {
                             <div className="flex flex-col space-y-4">
                               {/*      <!-- Input field --> */}
                               <div className="relative">
+                                <label
+                                  htmlFor="name"
+                                  className="text-xs text-slate-700"
+                                >
+                                  Item Name
+                                </label>
                                 <input
                                   id="name"
                                   type="text"
                                   name="name"
-                                  placeholder={UserItemDetail?.name}
+                                  placeholder={name}
                                   onChange={(e) => {
                                     setName(e.target.value);
                                   }}
@@ -313,11 +324,17 @@ export default function UserItemDetail() {
 
                               {/*      <!-- Input field --> */}
                               <div className="relative mb-6">
+                                <label
+                                  htmlFor="description"
+                                  className="text-xs text-slate-700"
+                                >
+                                  Item Description
+                                </label>
                                 <input
                                   id="description"
                                   type="text"
                                   name="description"
-                                  placeholder={UserItemDetail?.description}
+                                  placeholder={description}
                                   onChange={(e) => {
                                     setDescription(e.target.value);
                                   }}
@@ -328,11 +345,17 @@ export default function UserItemDetail() {
 
                               {/*      <!-- Input field --> */}
                               <div className="relative mb-6">
+                                <label
+                                  htmlFor="lostLocation"
+                                  className="text-xs text-slate-700"
+                                >
+                                  Item Lost Location
+                                </label>
                                 <input
                                   id="lost-location"
                                   type="text"
                                   name="lost-location"
-                                  placeholder={UserItemDetail?.lostLocation}
+                                  placeholder={lostLocation}
                                   onChange={(e) => {
                                     setLostLocation(e.target.value);
                                   }}
@@ -343,11 +366,17 @@ export default function UserItemDetail() {
 
                               {/*      <!-- Input field --> */}
                               <div className="relative mb-6">
+                                <label
+                                  htmlFor="imageUrl"
+                                  className="text-xs text-slate-700"
+                                >
+                                  Item Image Url
+                                </label>
                                 <input
                                   id="imageUrl"
                                   type="text"
                                   name="imageUrl"
-                                  placeholder={UserItemDetail?.imageUrl}
+                                  placeholder={imageUrl}
                                   onChange={(e) => {
                                     setImageUrl(e.target.value);
                                   }}
@@ -358,13 +387,17 @@ export default function UserItemDetail() {
 
                               {/*      <!-- Input field --> */}
                               <div className="relative mb-6">
+                                <label
+                                  htmlFor="validatingQuestion"
+                                  className="text-xs text-slate-700"
+                                >
+                                  Item Validating Question
+                                </label>
                                 <input
                                   id="validating-question"
                                   type="text"
                                   name="validating-question"
-                                  placeholder={
-                                    UserItemDetail?.validatingQuestion
-                                  }
+                                  placeholder={validatingQuestion}
                                   onChange={(e) => {
                                     setValidatingQuestion(e.target.value);
                                   }}
@@ -415,7 +448,7 @@ export default function UserItemDetail() {
         <h1 className="mb-4 text-center text-3xl font-extrabold text-slate-700">
           Gotten Responses
         </h1>
-        <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
+        <div className="mx-10 my-20 flex flex-wrap justify-center gap-10">
           {gottenResponses &&
             gottenResponses.map((gottenResponse: gottenResponseCardProps) => (
               <GottenResponseCard

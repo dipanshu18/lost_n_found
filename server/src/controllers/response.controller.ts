@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import transporter from "../utils/emails/email";
 
+const userClient = new PrismaClient().user;
 const postClient = new PrismaClient().post;
 const responseClient = new PrismaClient().response;
 
@@ -107,10 +108,29 @@ export async function createResponse(req: Request, res: Response) {
   const { userId, answer } = req.body;
 
   try {
+    const founder = await userClient.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        name: true,
+        email: true,
+      },
+    });
+
     // Fetch the validatingQuestion from the associated Post
     const post = await postClient.findUnique({
       where: { id: itemId },
-      select: { validatingQuestion: true },
+      select: {
+        name: true,
+        validatingQuestion: true,
+        owner: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
 
     if (!post) {
@@ -127,7 +147,40 @@ export async function createResponse(req: Request, res: Response) {
       },
     });
 
-    res.status(200).json(response);
+    if (response && founder) {
+      const successfulResponse = await transporter.sendMail({
+        from: `"Lost and Found" <noreply.Landf@gmail.com>`, // sender address
+        to: `${post.owner.email}`, // list of receivers
+        subject: `Hey your lost item post for " ${post.name} " has a response.`, // Subject line
+        text: `Your Lost Item " ${post.name} " has a response from user named ${founder?.name}. So now you can login and see if the response you have gotten is correct. If correct, you can approve the response and the founder can see your contact no. and discuss about returning your lost belongings.`,
+        html: `
+          <h5>Your Lost Item <strong>" ${post.name} "</strong> has a response from user named <strong>${founder?.name}</strong></h5>
+          <div>
+            <p>
+              So now you can login and see if the response you have gotten is correct. If correct, you can approve the response and the founder can see your contact no. and discuss about returning your lost belongings.
+            </p>
+          </div>
+        `,
+      });
+      console.log("Message sent: %s", successfulResponse.messageId);
+
+      const yourResponseConfirmation = await transporter.sendMail({
+        from: `"Lost and Found" <noreply.Landf@gmail.com>`, // sender address
+        to: `${founder.email}`, // list of receivers
+        subject: `Hey, ${founder.name} your response is successfully sent for lost item post " ${post.name} " by ${post.owner.name}.`, // Subject line
+        text: `Your response for lost Item " ${post.name} " by ${post.owner.name} has been successfully sent to the owner named ${post.owner.name}. So now you can login and see if your response gets approved. If approve, you can see the owner's contact no. and discuss about returning the lost item.`,
+        html: `
+          <h5>Your response for lost Item " ${post.name} " by ${post.owner.name} has been successfully sent to the owner named ${post.owner.name}. </h5>
+          <div>
+            <p>
+              So now you can login and see if your response gets approved. If approve, you can see the owner's contact no. and discuss about returning the lost item.
+            </p>
+          </div>
+        `,
+      });
+      console.log("Message sent: %s", yourResponseConfirmation.messageId);
+      res.status(200).json(response);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Internal Server Error" });
