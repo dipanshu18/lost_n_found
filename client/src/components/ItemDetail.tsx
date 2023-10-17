@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, FormEvent } from "react";
+import React, { useState, useRef, useEffect, FormEvent } from "react";
 import ReactDOM from "react-dom";
 import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
@@ -7,24 +7,39 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Spinner from "./Spinner";
 
+type ItemDetail = {
+  id: React.Key;
+  name: string;
+  description: string;
+  lostLocation: string;
+  imageUrl: string;
+  owner: {
+    id: React.Key;
+    name: string;
+  };
+  validatingQuestion: string;
+};
+
+type Responded = [
+  {
+    postId: React.Key;
+    founderId: React.Key;
+    ownerId: React.Key;
+  }
+];
+
 export default function ItemDetail() {
   const [isShowing, setIsShowing] = useState(false);
 
   const [userId, setUserId] = useState("");
   const { itemId } = useParams();
+  const [itemDetail, setItemDetail] = useState<ItemDetail>();
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [lostLocation, setLostLocation] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [owner, setOwner] = useState("");
-  const [ownerId, setOwnerId] = useState("");
-  const [validatingQuestion, setValidatingQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [responseLoading, setResponseLoading] = useState(false);
-  const [alreadyResponded, setAlreadyResponded] = useState([]);
+  const [alreadyResponded, setAlreadyResponded] = useState<Responded | []>([]);
 
   useEffect(() => {
     async function fetchcurrentUserId() {
@@ -49,13 +64,7 @@ export default function ItemDetail() {
 
       if (request.status === 200) {
         setLoading(false);
-        setName(request.data.name);
-        setDescription(request.data.description);
-        setLostLocation(request.data.lostLocation);
-        setImageUrl(request.data.imageUrl);
-        setOwner(request.data.owner.name);
-        setValidatingQuestion(request.data.validatingQuestion);
-        setOwnerId(request.data.owner.id);
+        setItemDetail(request.data);
       }
     }
 
@@ -91,7 +100,7 @@ export default function ItemDetail() {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
-    function handleClickOutside(event: FormEvent) {
+    function handleClickOutside(event: MouseEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setIsShowing(false);
       }
@@ -103,7 +112,7 @@ export default function ItemDetail() {
   }, [wrapperRef]);
 
   useEffect(() => {
-    function handleClickOutside(event) {
+    function handleClickOutside(event: MouseEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setIsShowing(false);
       }
@@ -183,7 +192,7 @@ export default function ItemDetail() {
         {/*  <!--  Image --> */}
         <figure className="lg:col-span-2">
           <img
-            src={imageUrl}
+            src={itemDetail?.imageUrl}
             alt="card image"
             className="aspect-video w-full  rounded-xl"
           />
@@ -191,15 +200,19 @@ export default function ItemDetail() {
         {/*  <!-- Body--> */}
         <div className="lg:p-6 lg:col-span-1">
           <header className="">
-            <h3 className="text-5xl mb-4 font-medium text-slate-700">{name}</h3>
-            <p className="text-lg text-slate-500">{description}</p>
-            <h5 className="text-lg font-medium text-emerald-600">By {owner}</h5>
+            <h3 className="text-5xl mb-4 font-medium text-slate-700">
+              {itemDetail?.name}
+            </h3>
+            <p className="text-lg text-slate-500">{itemDetail?.description}</p>
+            <h5 className="text-lg font-medium text-emerald-600">
+              By {itemDetail?.owner.name}
+            </h5>
             <p className="mb-4 font-semibold text-xl text-slate-600">
               <br />
-              Lost Location: {lostLocation}
+              Lost Location: {itemDetail?.lostLocation}
             </p>
 
-            {ownerId !== userId &&
+            {itemDetail?.owner.id !== userId &&
               !alreadyResponded.some(
                 (response) =>
                   response.founderId === userId && response.postId === itemId
@@ -218,7 +231,7 @@ export default function ItemDetail() {
                     className="fixed top-0 left-0 z-20 flex h-screen w-screen items-center justify-center bg-slate-300/20 backdrop-blur-sm"
                     aria-labelledby="header-3a content-3a"
                     aria-modal="true"
-                    tabIndex="-1"
+                    tabIndex={-1}
                     role="dialog"
                   >
                     {/*    <!-- Modal --> */}
@@ -276,7 +289,7 @@ export default function ItemDetail() {
                           <div className="p-6">
                             <div className="flex flex-col space-y-4">
                               <p className="text-md mt-2 text-slate-700">
-                                {validatingQuestion}
+                                {itemDetail?.validatingQuestion}
                               </p>
                               {/*      <!-- Input field --> */}
                               <div className="relative mb-6">

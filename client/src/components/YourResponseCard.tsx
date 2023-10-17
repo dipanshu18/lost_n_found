@@ -2,7 +2,27 @@ import { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
-export default function YourResponseCard({ response }) {
+export type ResponseProps = {
+  id: React.Key;
+  approved: boolean;
+  validatingQuestion: string;
+  answer: string;
+  post: {
+    imageUrl: string;
+    name: string;
+    owner: {
+      name: string;
+      phoneNo: string;
+    };
+  };
+  updatedAt: string;
+};
+
+export default function YourResponseCard({
+  response,
+}: {
+  response: ResponseProps;
+}) {
   const [responseApproved, setResponseApproved] = useState(response.approved);
 
   const [isShowing, setIsShowing] = useState(false);
@@ -10,7 +30,7 @@ export default function YourResponseCard({ response }) {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
-    function handleClickOutside(event) {
+    function handleClickOutside(event: MouseEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setIsShowing(false);
       }

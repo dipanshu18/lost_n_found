@@ -4,6 +4,8 @@ import YourResponseCard from "../components/YourResponseCard";
 import axios from "axios";
 import Spinner from "../components/Spinner";
 
+import { ResponseProps } from "../components/YourResponseCard";
+
 export default function YourResponses() {
   const [loading, setLoading] = useState(false);
   const [userResponses, setUserResponses] = useState([]);
@@ -33,7 +35,7 @@ export default function YourResponses() {
 
       <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
         {userResponses &&
-          userResponses.map((userResponse) => (
+          userResponses.map((userResponse: ResponseProps) => (
             <YourResponseCard key={userResponse.id} response={userResponse} />
           ))}
       </div>

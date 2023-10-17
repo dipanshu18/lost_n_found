@@ -1,7 +1,17 @@
 import { Link } from "react-router-dom";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
-export default function LostItemCard({ item }) {
+export type lostItemCardProps = {
+  id: React.Key;
+  imageUrl: string;
+  name: string;
+  owner: {
+    name: string;
+  };
+  updatedAt: string;
+};
+
+export default function LostItemCard({ item }: { item: LostItemCardProps }) {
   return (
     <>
       {/*<!-- Component: Basic image card --> */}

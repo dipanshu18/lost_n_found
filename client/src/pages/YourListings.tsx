@@ -4,6 +4,8 @@ import YourListingsCard from "../components/YourListingsCard";
 import axios from "axios";
 import Spinner from "../components/Spinner";
 
+import { listingProps } from "../components/YourListingsCard";
+
 export default function YourListings() {
   const [userPosts, setUserPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,7 +34,7 @@ export default function YourListings() {
       )}
       <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
         {userPosts &&
-          userPosts.map((userPost) => (
+          userPosts.map((userPost: listingProps) => (
             <YourListingsCard key={userPost.id} post={userPost} />
           ))}
       </div>

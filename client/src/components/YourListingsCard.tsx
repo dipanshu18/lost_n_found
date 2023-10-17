@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
-export default function YourListingsCard({ post }) {
+export type listingProps = {
+  id: React.Key;
+  ownerId: React.Key;
+  name: string;
+  imageUrl: string;
+  updatedAt: string;
+};
+
+export default function YourListingsCard({ post }: { post: listingProps }) {
   return (
     <>
       {/*<!-- Component: Basic image card --> */}

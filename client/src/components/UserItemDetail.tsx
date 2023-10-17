@@ -8,9 +8,20 @@ import Spinner from "./Spinner";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+type UserItemDetail = {
+  id: React.Key;
+  name: string;
+  description: string;
+  lostLocation: string;
+  imageUrl: string;
+  validatingQuestion: string;
+};
+
 export default function UserItemDetail() {
   const navigate = useNavigate();
   const { itemId } = useParams();
+  const [UserItemDetail, setUserItemDetail] = useState<UserItemDetail>();
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [lostLocation, setLostLocation] = useState("");
@@ -31,11 +42,7 @@ export default function UserItemDetail() {
 
       if (request.status === 200) {
         setLoading(false);
-        setName(request.data.name);
-        setDescription(request.data.description);
-        setLostLocation(request.data.lostLocation);
-        setImageUrl(request.data.imageUrl);
-        setValidatingQuestion(request.data.validatingQuestion);
+        setUserItemDetail(request.data);
       }
     }
 
@@ -50,8 +57,6 @@ export default function UserItemDetail() {
     fetchGottenResponses();
     fetchItemDetail();
   }, []);
-
-  console.log(gottenResponses);
 
   async function handlePostUpdate(e: FormEvent) {
     e.preventDefault();
@@ -103,7 +108,7 @@ export default function UserItemDetail() {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
-    function handleClickOutside(event: FormEvent) {
+    function handleClickOutside(event: MouseEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setIsShowing(false);
       }
@@ -115,7 +120,7 @@ export default function UserItemDetail() {
   }, [wrapperRef]);
 
   useEffect(() => {
-    function handleClickOutside(event) {
+    function handleClickOutside(event: MouseEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setIsShowing(false);
       }
@@ -195,7 +200,7 @@ export default function UserItemDetail() {
         {/*  <!--  Image --> */}
         <figure className="lg:col-span-2">
           <img
-            src={imageUrl}
+            src={UserItemDetail?.imageUrl}
             alt="card image"
             className="aspect-video w-full  rounded-xl"
           />
@@ -203,11 +208,15 @@ export default function UserItemDetail() {
         {/*  <!-- Body--> */}
         <div className="lg:p-6 lg:col-span-1">
           <header className="">
-            <h3 className="mb-4 text-5xl font-bold text-slate-700">{name}</h3>
-            <p className="mb-4 text-lg text-slate-500">{description}</p>
+            <h3 className="mb-4 text-5xl font-bold text-slate-700">
+              {UserItemDetail?.name}
+            </h3>
+            <p className="mb-4 text-lg text-slate-500">
+              {UserItemDetail?.description}
+            </p>
 
             <p className="mb-4 font-semibold text-xl text-slate-400">
-              Lost Location: {lostLocation}
+              Lost Location: {UserItemDetail?.lostLocation}
             </p>
 
             {/*<!-- Component: Large secondary basic button --> */}
@@ -292,7 +301,7 @@ export default function UserItemDetail() {
                                   id="name"
                                   type="text"
                                   name="name"
-                                  placeholder={name}
+                                  placeholder={UserItemDetail?.name}
                                   onChange={(e) => {
                                     setName(e.target.value);
                                   }}
@@ -307,7 +316,7 @@ export default function UserItemDetail() {
                                   id="description"
                                   type="text"
                                   name="description"
-                                  placeholder={description}
+                                  placeholder={UserItemDetail?.description}
                                   onChange={(e) => {
                                     setDescription(e.target.value);
                                   }}
@@ -322,7 +331,7 @@ export default function UserItemDetail() {
                                   id="lost-location"
                                   type="text"
                                   name="lost-location"
-                                  placeholder={lostLocation}
+                                  placeholder={UserItemDetail?.lostLocation}
                                   onChange={(e) => {
                                     setLostLocation(e.target.value);
                                   }}
@@ -337,7 +346,7 @@ export default function UserItemDetail() {
                                   id="imageUrl"
                                   type="text"
                                   name="imageUrl"
-                                  placeholder={imageUrl}
+                                  placeholder={UserItemDetail?.imageUrl}
                                   onChange={(e) => {
                                     setImageUrl(e.target.value);
                                   }}
@@ -352,7 +361,9 @@ export default function UserItemDetail() {
                                   id="validating-question"
                                   type="text"
                                   name="validating-question"
-                                  placeholder={validatingQuestion}
+                                  placeholder={
+                                    UserItemDetail?.validatingQuestion
+                                  }
                                   onChange={(e) => {
                                     setValidatingQuestion(e.target.value);
                                   }}
@@ -405,7 +416,7 @@ export default function UserItemDetail() {
         </h1>
         <div className="mx-10 my-20 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
           {gottenResponses &&
-            gottenResponses.map((gottenResponse) => (
+            gottenResponses.map((gottenResponse: { id: React.Key }) => (
               <GottenResponseCard
                 key={gottenResponse.id}
                 response={gottenResponse}

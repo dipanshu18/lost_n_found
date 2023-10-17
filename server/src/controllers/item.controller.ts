@@ -104,6 +104,16 @@ export async function createItemPost(req: Request, res: Response) {
       },
     });
 
+    const userEmail = await userClient.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        name: true,
+        email: true,
+      },
+    });
+
     const emailArr: string[] = [];
     if (emails) {
       for (let i = 0; i < emails.length; i++) {
@@ -123,22 +133,39 @@ export async function createItemPost(req: Request, res: Response) {
     });
 
     if (createPost) {
-      const confirmationMail = await transporter.sendMail({
+      const postedSuccessfulMail = await transporter.sendMail({
         from: `"Lost and Found" <noreply.Landf@gmail.com>`, // sender address
-        to: `${emailArr}`, // list of receivers
-        subject: "Hey a lost item is posted!", // Subject line
-        text: "New Lost Item Posted. Thank you for choosing Lost and Found. The new lost item is successfully listed on our app homepage, so now you can login and see if you can find the item. Also thanks for using our app, showing patience for posting about your lost belongings and we hope you find your item as soon as possible and we appreciate that support.",
+        to: `${userEmail?.email}`, // list of receivers
+        subject: "Hey your lost belonging is posted successfully!", // Subject line
+        text: `Your Lost Item " ${name} " is posted successfully. Thank you for choosing Lost and Found. So now you can login and see if your listing on our homepage. Also thanks for using our app, showing patience for posting about your lost belongings and we hope you find your item as soon as possible and we appreciate that support.`,
         html: `
-          <h1>New Lost Item Posted.</h1>
+          <h1>Your Lost Item " ${name} " is posted successfully</h1>
           <div>
             <p>
-              <strong>Thankyou for choosing Lost and Found.</strong> The new lost item is successfully listed on our app homepage, so now you can login and see if you can find the item. Also thanks for using our app, showing patience for posting about your lost belongings and we hope you find your item as soon as possible and we appreciate that support.
+              <strong>Thankyou for choosing Lost and Found.</strong> So now you can login and see if your listing on our homepage. Also thanks for using our app, showing patience for posting about your lost belongings and we hope you find your item as soon as possible and we appreciate that support.
             </p>
           </div>
         `,
       });
 
-      console.log("Message sent: %s", confirmationMail.messageId);
+      const itemPostedMail = await transporter.sendMail({
+        from: `"Lost and Found" <noreply.Landf@gmail.com>`, // sender address
+        to: `${emailArr}`, // list of receivers
+        subject: "Hey a new lost item post is created!", // Subject line
+        text: `New Lost Item Posted. The new lost item for " ${name} " by <strong>${userEmail?.name}</strong> is successfully listed on our app homepage, so now you can login and see if you can find the item. We hope the lost item reaches ${userEmail?.name} as soon as possible and we appreciate that support.`,
+        html: `
+          <h1>New Lost Item Posted.</h1>
+          <div>
+            <p>
+              The new lost item for " ${name} " by <strong>${userEmail?.name}</strong> is successfully listed on our app homepage, so now you can login and see if you can find the item. We hope the lost item reaches ${userEmail?.name} as soon as possible and we appreciate that support.
+            </p>
+          </div>
+        `,
+      });
+
+      console.log("Message sent: %s", postedSuccessfulMail.messageId);
+
+      console.log("Message sent: %s", itemPostedMail.messageId);
       res.status(200).json(createPost);
     }
   } catch (err) {

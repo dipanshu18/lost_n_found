@@ -5,7 +5,23 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function GottenResponseCard({ response }) {
+export type GottenResponseCardProps = {
+  id: React.Key;
+  postId: React.Key;
+  validatingQuestion: string;
+  answer: string;
+  founder: {
+    name: string;
+  };
+  approved: boolean;
+  updatedAt: string;
+};
+
+export default function GottenResponseCard({
+  response,
+}: {
+  response: GottenResponseCardProps;
+}) {
   const [loading, setLoading] = useState(false);
 
   async function handleApproval() {
@@ -24,8 +40,6 @@ export default function GottenResponseCard({ response }) {
       toast.error("Unexpected Error");
     }
   }
-
-  console.log(response);
 
   return (
     <>
