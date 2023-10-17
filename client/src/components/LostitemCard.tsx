@@ -16,7 +16,7 @@ export default function LostItemCard({ item }: { item: lostItemCardProps }) {
     <>
       {/*<!-- Component: Basic image card --> */}
       <Link to={`/home/${item.id}`}>
-        <div className="overflow-hidden rounded bg-white text-slate-500 border-slate-100 shadow-xl shadow-slate-200">
+        <div className="p-4 overflow-hidden rounded bg-gray-50 text-slate-500 border-slate-100 shadow-xl shadow-slate-200">
           {/*  <!--  Image --> */}
           <figure>
             <img

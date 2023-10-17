@@ -76,7 +76,7 @@ export default function Signup() {
       {/*<!-- Component: Card with form --> */}
       <form
         onSubmit={handleSignup}
-        className="max-w-xl mt-10 mx-10 md:mx-auto overflow-hidden rounded bg-white text-slate-500 shadow-md shadow-slate-200"
+        className="max-w-xl mt-10 mx-10 md:mx-auto overflow-hidden rounded bg-gray-100 text-slate-500 shadow-md shadow-slate-200"
       >
         {/*  <!-- Body--> */}
         <div className="p-6">

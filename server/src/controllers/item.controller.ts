@@ -4,6 +4,7 @@ import transporter from "../utils/emails/email";
 
 const userClient = new PrismaClient().user;
 const itemClient = new PrismaClient().post;
+const responseClient = new PrismaClient().response;
 
 export async function getItems(req: Request, res: Response) {
   try {
@@ -228,6 +229,12 @@ export async function deleteItemPost(req: Request, res: Response) {
       return res.status(404).json({ msg: "No item found with that ID" });
     }
 
+    const deleteResponsesOfPost = await responseClient.deleteMany({
+      where: {
+        postId: id,
+      },
+    });
+
     const deletedPost = await itemClient.delete({
       where: {
         id,
@@ -235,7 +242,7 @@ export async function deleteItemPost(req: Request, res: Response) {
       },
     });
 
-    if (deletedPost) {
+    if (deletedPost && deleteResponsesOfPost) {
       res.status(200).json({ msg: "Deleted successfully" });
     }
   } catch (err) {

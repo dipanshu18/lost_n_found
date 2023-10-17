@@ -5,9 +5,9 @@ export default function Landing() {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
 
   return (
-    <>
+    <div className="bg-gray-100">
       {/*<!-- Component: Navbar with CTA --> */}
-      <header className="border-b-1 relative z-20 w-full border-b border-slate-200 bg-white/90 shadow-lg shadow-slate-700/5 after:absolute after:top-full after:left-0 after:z-10 after:block after:h-px after:w-full after:bg-slate-200 lg:border-slate-200 lg:backdrop-blur-sm lg:after:hidden">
+      <header className="border-b-1 relative z-20 w-full border-b border-slate-200 bg-gray-200 shadow-lg shadow-slate-700/5 after:absolute after:top-full after:left-0 after:z-10 after:block after:h-px after:w-full after:bg-slate-200 lg:border-slate-200 lg:backdrop-blur-sm lg:after:hidden">
         <div className="relative mx-auto max-w-full px-6 lg:max-w-5xl xl:max-w-7xl 2xl:max-w-[96rem]">
           <nav
             aria-label="main navigation"
@@ -119,7 +119,7 @@ export default function Landing() {
           {/*<!-- Component: Large secondary basic button --> */}
           <div className="text-center">
             <Link to="/signup">
-              <button className="my-14 inline-flex h-12 items-center justify-center gap-2 justify-self-center whitespace-nowrap rounded-xl bg-teal-50 px-16 py-10 text-lg font-medium tracking-wide text-teal-500 transition duration-300 hover:bg-teal-100 hover:text-teal-600 focus:bg-teal-200 focus:text-teal-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-teal-300 disabled:bg-teal-100 disabled:text-teal-400 disabled:shadow-none">
+              <button className="my-14 inline-flex h-12 items-center justify-center gap-2 justify-self-center whitespace-nowrap rounded-xl bg-teal-200 px-16 py-10 text-lg font-medium tracking-wide text-teal-700 transition duration-300 hover:bg-teal-600 hover:text-white focus:bg-teal-200 focus:text-teal-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-teal-300 disabled:bg-teal-100 disabled:text-teal-400 disabled:shadow-none">
                 <span>Let's get started</span>
               </button>
             </Link>
@@ -394,6 +394,6 @@ export default function Landing() {
         </div>
       </footer>
       {/*<!-- End Primary Light Theme Footer --> */}
-    </>
+    </div>
   );
 }

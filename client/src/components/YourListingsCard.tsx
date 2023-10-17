@@ -14,7 +14,7 @@ export default function YourListingsCard({ post }: { post: listingProps }) {
     <>
       <Link to={`/home/${post.ownerId}/${post.id}`}>
         {/*<!-- Component: Basic image card --> */}
-        <div className="overflow-hidden rounded bg-white text-slate-500 shadow-md shadow-slate-200">
+        <div className="p-4 overflow-hidden rounded bg-gray-50 text-slate-500 shadow-md shadow-slate-200">
           {/*  <!--  Image --> */}
           <figure>
             <img

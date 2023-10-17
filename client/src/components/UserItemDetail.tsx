@@ -192,7 +192,7 @@ export default function UserItemDetail() {
   }, [isShowing]);
 
   return (
-    <>
+    <div className="bg-gray-50">
       <Navbar />
 
       {loading && (
@@ -458,6 +458,6 @@ export default function UserItemDetail() {
             ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }

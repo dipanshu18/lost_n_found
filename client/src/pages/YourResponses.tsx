@@ -25,7 +25,7 @@ export default function YourResponses() {
   }, []);
 
   return (
-    <>
+    <div className="bg-gray-100 min-h-screen">
       <Navbar />
       {loading && (
         <div className="flex  my-20 justify-center items-center">
@@ -39,6 +39,6 @@ export default function YourResponses() {
             <YourResponseCard key={userResponse.id} response={userResponse} />
           ))}
       </div>
-    </>
+    </div>
   );
 }

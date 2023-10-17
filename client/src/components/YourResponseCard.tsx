@@ -98,7 +98,7 @@ export default function YourResponseCard({
   return (
     <>
       {/*<!-- Component: Basic card --> */}
-      <div className="overflow-hidden rounded bg-white text-slate-500 shadow-md shadow-slate-200">
+      <div className="p-4 overflow-hidden rounded bg-gray-50 text-slate-500 shadow-md shadow-slate-200">
         {/*  <!--  Image --> */}
         <figure>
           <img

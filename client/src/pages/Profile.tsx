@@ -70,7 +70,7 @@ export default function Profile() {
       {/*<!-- Component: Card with form --> */}
       <form
         onSubmit={handleUserProfileUpdate}
-        className="my-10 max-w-xl mx-10 md:mx-auto overflow-hidden rounded bg-white text-slate-500 shadow-md shadow-slate-200"
+        className="my-10 max-w-xl mx-10 md:mx-auto overflow-hidden rounded bg-gray-50 text-slate-500 shadow-md shadow-slate-200"
       >
         {/*  <!-- Body--> */}
         <div className="p-6">

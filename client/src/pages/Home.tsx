@@ -24,7 +24,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div className="bg-gray-100 min-h-screen">
       <Navbar />
       {loading && (
         <div className="flex my-20 justify-center items-center">
@@ -37,6 +37,6 @@ export default function Home() {
             <LostItemCard key={lostItem.id} item={lostItem} />
           ))}
       </div>
-    </>
+    </div>
   );
 }

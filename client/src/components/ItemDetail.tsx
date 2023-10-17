@@ -178,7 +178,7 @@ export default function ItemDetail() {
   }, [isShowing]);
 
   return (
-    <>
+    <div className="bg-gray-50">
       <Navbar />
 
       {loading && (
@@ -188,7 +188,7 @@ export default function ItemDetail() {
       )}
 
       {/*<!-- Component: Basic image card --> */}
-      <div className="my-10 p-14 gap-10 grid lg:grid-cols-3 overflow-hidden text-slate-500">
+      <div className="my-10 p-20 gap-10 grid lg:grid-cols-3 overflow-hidden text-slate-500">
         {/*  <!--  Image --> */}
         <figure className="lg:col-span-2">
           <img
@@ -340,6 +340,6 @@ export default function ItemDetail() {
         </div>
       </div>
       {/*<!-- End Basic image card --> */}
-    </>
+    </div>
   );
 }
