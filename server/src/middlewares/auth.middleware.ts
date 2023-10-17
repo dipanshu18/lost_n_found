@@ -1,7 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import dotenv from "dotenv";
 
-const secretKey: string = process.env.SECRET || "bMJKWMp";
+dotenv.config();
+
+const secretKey = process.env.SECRET;
 
 export function verifyToken(req: Request, res: Response, next: NextFunction) {
   const token = req.cookies.token;
@@ -12,7 +15,7 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
 
   jwt.verify(
     token,
-    secretKey,
+    secretKey as jwt.Secret,
     (err: jwt.VerifyErrors | any, decoded: JwtPayload | any) => {
       if (err) {
         return res.status(401).json({ message: "Unauthorized" });

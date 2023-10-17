@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { verifyPassword } from "../utils/hashPasswords";
 
-const secretKey: string = process.env.SECRET || "bMJKWMp";
+const secretKey: string | undefined = process.env.SECRET;
 
 const userClient = new PrismaClient().user;
 
@@ -24,7 +24,7 @@ export async function loginUser(req: Request, res: Response) {
     }
 
     if (user && (await verifyPassword(password, user.password))) {
-      const token = jwt.sign({ userId: user?.id }, secretKey);
+      const token = jwt.sign({ userId: user?.id }, secretKey as jwt.Secret);
       res.cookie("token", token, { httpOnly: true });
       res.status(200).json({ msg: "Logged in successfully." });
     } else {

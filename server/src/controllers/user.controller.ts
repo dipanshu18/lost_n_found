@@ -2,10 +2,14 @@ import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { hashPassword } from "../utils/hashPasswords";
 import transporter from "../utils/emails/email";
-import jwt from "jsonwebtoken";
+import jwt, { Jwt } from "jsonwebtoken";
 
 const userClient = new PrismaClient().user;
-const secretKey: string = process.env.SECRET || "bMJKWMp";
+const secretKey: string | undefined = process.env.SECRET;
+
+if (secretKey === undefined) {
+  throw new Error("SECRET environment variable is not defined.");
+}
 
 export async function userSignup(req: Request, res: Response) {
   try {
@@ -53,7 +57,7 @@ export async function userSignup(req: Request, res: Response) {
 
       console.log("Message sent: %s", confirmationMail.messageId);
 
-      const token = jwt.sign({ userId: newUser.id }, secretKey);
+      const token = jwt.sign({ userId: newUser.id }, secretKey as jwt.Secret);
       res.cookie("token", token, { httpOnly: true });
     }
 
