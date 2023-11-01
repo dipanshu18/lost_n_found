@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { hashPassword } from "../utils/hashPasswords";
 import transporter from "../utils/emails/email";
-import jwt, { Jwt } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const userClient = new PrismaClient().user;
 const secretKey: string | undefined = process.env.SECRET;
