@@ -37,7 +37,7 @@ export default function Home() {
 
       <section className="py-24 ">
         <h1 className="text-center my-10 text-4xl font-bold">What we do?</h1>
-        <div className="flex flex-wrap mx-10 justify-center items-center gap-10">
+        <div className="grid place-items-center grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 m-10">
           <div className="card w-96 bg-primary-content">
             <div className="card-body items-center text-center">
               <h2 className="card-title">Cookies!</h2>

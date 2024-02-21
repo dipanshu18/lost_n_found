@@ -16,6 +16,7 @@ const navItems: navItemType[] = [
   { item: "Responses", link: "/responses" },
   { item: "Post", link: "/create-post" },
   { item: "Your responses", link: "/your-responses" },
+  { item: "Found something", link: "/found-item-post" },
 ];
 
 export default function Navbar() {
@@ -69,10 +70,25 @@ export default function Navbar() {
                     </Link>
                   );
                 })}
-                <button className="btn btn-primary mt-2">Logout</button>
+                <Link
+                  href="/profile"
+                  onClick={() => setShowing(!showing)}
+                  className="text-center"
+                >
+                  <button className="btn btn-ghost text-md hover:text-primary">
+                    Profile
+                  </button>
+                </Link>
+                <Link
+                  href="/"
+                  onClick={() => setShowing(!showing)}
+                  className="text-center"
+                >
+                  <button className="btn btn-primary mt-2">Logout</button>
+                </Link>
               </>
             ) : (
-              <Link href="/login">
+              <Link href="/login" onClick={() => setShowing(!showing)}>
                 <button className="btn btn-primary">Login</button>
               </Link>
             )}

@@ -2,16 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Create lost item post",
+  title: "Create found item post",
 };
 
-export default function CreatePost() {
+export default function FoundItemPost() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="hero-content flex-col">
         <div className="text-center">
           <h1 className="text-3xl font-bold my-10">
-            Create Post about your lost belonging...
+            Create Post about found some item...
           </h1>
         </div>
         <div className="card shrink-0 w-full max-w-2xl shadow-2xl bg-base-100">
@@ -69,7 +69,9 @@ export default function CreatePost() {
               />
             </div>
             <div className="form-control mt-6">
-              <button className="btn btn-primary">Create post</button>
+              <button className="btn btn-primary">
+                Create found item post
+              </button>
             </div>
           </form>
         </div>
