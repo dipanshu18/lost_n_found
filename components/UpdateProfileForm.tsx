@@ -62,7 +62,7 @@ export default function Profile() {
             <div className="form-control mt-6">
               <div className="card-actions">
                 <button className="btn btn-primary">Update Info</button>
-                <Link href="/profile">
+                <Link href="/dashboard/profile">
                   <button className="btn btn-warning">Cancel</button>
                 </Link>
               </div>

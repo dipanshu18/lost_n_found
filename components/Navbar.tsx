@@ -1,5 +1,7 @@
 "use client";
 
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { FaUser } from "react-icons/fa6";
@@ -9,17 +11,14 @@ interface navItemType {
   link: string;
 }
 
-const user = "fdfgf";
-
 const navItems: navItemType[] = [
-  { item: "Home", link: "/dashboard" },
-  { item: "Responses", link: "/responses" },
-  { item: "Post", link: "/create-post" },
-  { item: "Your responses", link: "/your-responses" },
-  { item: "Found something", link: "/found-item-post" },
+  { item: "Responses", link: "/dashboard/responses" },
+  { item: "Post", link: "/dashboard/create-post" },
+  { item: "Your responses", link: "/dashboard/your-responses" },
+  { item: "Found something", link: "/dashboard/found-item-post" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ session }: { session: Session | null }) {
   const [showing, setShowing] = useState(false);
 
   return (
@@ -56,7 +55,7 @@ export default function Navbar() {
                 : "hidden"
             }
           >
-            {user ? (
+            {session ? (
               <>
                 {navItems.map((itemContent, index) => {
                   return (
@@ -71,7 +70,7 @@ export default function Navbar() {
                   );
                 })}
                 <Link
-                  href="/profile"
+                  href="/dashboard/profile"
                   onClick={() => setShowing(!showing)}
                   className="text-center"
                 >
@@ -79,13 +78,14 @@ export default function Navbar() {
                     Profile
                   </button>
                 </Link>
-                <Link
-                  href="/"
-                  onClick={() => setShowing(!showing)}
-                  className="text-center"
+                <button
+                  onClick={() => {
+                    signOut();
+                  }}
+                  className="btn btn-primary mt-2"
                 >
-                  <button className="btn btn-primary mt-2">Logout</button>
-                </Link>
+                  Logout
+                </button>
               </>
             ) : (
               <Link href="/login" onClick={() => setShowing(!showing)}>
@@ -96,7 +96,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden xl:block">
-          {user ? (
+          {session ? (
             navItems &&
             navItems.map((itemContent, index) => {
               return (
@@ -118,7 +118,7 @@ export default function Navbar() {
 
       <div className="navbar-center">
         <Link
-          href={user ? "/dashboard" : "/"}
+          href={session ? "/dashboard" : "/"}
           className="btn btn-ghost text-xl"
         >
           Lost and Found
@@ -126,7 +126,7 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-end invisible xl:visible">
-        {user && user ? (
+        {session && session ? (
           <div className="flex gap-4">
             <div className="flex-none">
               <div className="dropdown dropdown-end">
@@ -137,7 +137,7 @@ export default function Navbar() {
                   aria-label="menu"
                   className="btn btn-ghost btn-circle avatar"
                 >
-                  <Link href="/profile">
+                  <Link href="/dashboard/profile">
                     <div className="bg-slate-300 p-2 rounded-full">
                       <FaUser />
                     </div>
@@ -146,9 +146,14 @@ export default function Navbar() {
               </div>
             </div>
 
-            <Link href="/" onClick={() => setShowing(!showing)}>
-              <button className="btn btn-primary">Logout</button>
-            </Link>
+            <button
+              onClick={() => {
+                signOut();
+              }}
+              className="btn btn-primary"
+            >
+              Logout
+            </button>
           </div>
         ) : (
           <Link href="/login" onClick={() => setShowing(!showing)}>
