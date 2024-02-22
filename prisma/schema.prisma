@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String           @id @default(uuid())
+  name           String
+  phoneNo        String           @unique
+  email          String           @unique
+  password       String
+  lostItems      LostItemPost[]
+  foundItems     FoundItemPost[]
+  FinderResponse FinderResponse[]
+  OwnerResponse  OwnerResponse[]
+}
+
+model LostItemPost {
+  id                   String           @id @default(uuid())
+  name                 String
+  description          String
+  lostLocation         String
+  imageUrl             String
+  verificationQuestion String
+  response             FinderResponse[]
+  user                 User             @relation(fields: [userId], references: [id])
+  userId               String
+}
+
+model FinderResponse {
+  id             String         @id @default(uuid())
+  answer         String
+  status         ResponseStatus @default(PENDING)
+  finder         User           @relation(fields: [finderId], references: [id])
+  finderId       String
+  lostItemPost   LostItemPost   @relation(fields: [lostItemPostId], references: [id])
+  lostItemPostId String
+}
+
+model FoundItemPost {
+  id                   String          @id @default(uuid())
+  name                 String
+  description          String
+  lostLocation         String
+  verificationQuestion String
+  response             OwnerResponse[]
+  imageUrl             String
+  finder               User            @relation(fields: [finderId], references: [id])
+  finderId             String
+}
+
+model OwnerResponse {
+  id              String         @id @default(uuid())
+  answer          String
+  status          ResponseStatus @default(PENDING)
+  owner           User           @relation(fields: [ownerId], references: [id])
+  ownerId         String
+  foundItemPost   FoundItemPost  @relation(fields: [foundItemPostId], references: [id])
+  foundItemPostId String
+}
+
+enum ResponseStatus {
+  PENDING
+  REJECTED
+  APPROVED
+}
