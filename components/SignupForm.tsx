@@ -19,6 +19,7 @@ export default function SignupForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<signupUserType>({
+    reValidateMode: "onChange",
     resolver: zodResolver(signupUserSchema),
   });
 
@@ -62,7 +63,6 @@ export default function SignupForm() {
                 {...register("name")}
                 placeholder="full name"
                 className="input input-bordered"
-                required
               />
               {errors && (
                 <span className="text-rose-700">{errors.name?.message}</span>
@@ -82,7 +82,6 @@ export default function SignupForm() {
                 {...register("phoneNo")}
                 placeholder="phone no"
                 className="input input-bordered"
-                required
               />
               {errors && (
                 <span className="text-rose-700">{errors.phoneNo?.message}</span>
@@ -97,7 +96,6 @@ export default function SignupForm() {
                 {...register("email")}
                 placeholder="email"
                 className="input input-bordered"
-                required
               />
               {errors && (
                 <span className="text-rose-700">{errors.email?.message}</span>
@@ -112,7 +110,6 @@ export default function SignupForm() {
                 {...register("password")}
                 placeholder="password"
                 className="input input-bordered"
-                required
               />
               {errors && (
                 <span className="text-rose-700">

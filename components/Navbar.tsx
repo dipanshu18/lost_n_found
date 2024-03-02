@@ -88,8 +88,12 @@ export default function Navbar({ session }: { session: Session | null }) {
                 </button>
               </>
             ) : (
-              <Link href="/login" onClick={() => setShowing(!showing)}>
-                <button className="btn btn-primary">Login</button>
+              <Link
+                href="/login"
+                className="w-full"
+                onClick={() => setShowing(!showing)}
+              >
+                <button className="btn btn-primary w-full">Login</button>
               </Link>
             )}
           </ul>

@@ -1,35 +1,39 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+
 import { userProfileType } from "@/types";
 import { getServerSession } from "next-auth";
-import { PrismaClient } from "@prisma/client";
+
+import prisma from "@/lib/prisma";
+
 export const metadata: Metadata = {
   title: "Profile",
 };
 
-const userClient = new PrismaClient().user;
+async function getUserProfile(
+  email: string
+): Promise<userProfileType | undefined> {
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
 
-// export async function getUserProfile({
-//   email,
-// }: {
-//   email: string;
-// }): Promise<userProfileType> {
-//   try {
-//     const user = await userClient.findUnique({ where: { email } });
-
-//     if (user) {
-//       return user;
-//     }
-//   } catch (error) {
-//     console.error("Error fetching user profile:", error);
-//   }
-// }
+  if (user) {
+    return user;
+  }
+}
 
 export default async function Profile() {
-  // const session = await getServerSession();
-  // const { name, email, phoneNo } = await getUserProfile({
-  //   email: session?.user?.email as string,
-  // });
+  const session = await getServerSession();
+
+  const data = await getUserProfile(session?.user?.email as string);
+
+  if (!data) {
+    return (
+      <h1 className="text-center my-10 text-3xl font-semibold">
+        No user found...
+      </h1>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -44,24 +48,24 @@ export default async function Profile() {
                 <span className="label-text">Name</span>
               </label>
 
-              {/* <div className="text-xl font-bold">{name}</div> */}
+              <div className="text-xl font-bold">{data.name}</div>
             </div>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Phone no</span>
               </label>
 
-              {/* <div className="text-xl font-bold">{phoneNo}</div> */}
+              <div className="text-xl font-bold">{data?.phoneNo}</div>
             </div>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
               </label>
-              {/* <div className="text-xl font-bold">{email}</div> */}
+              <div className="text-xl font-bold">{data?.email}</div>
             </div>
 
             <div className="form-control mt-6">
-              <Link href="/dashboard/profile/:id">
+              <Link href={`/dashboard/profile/${data.id}`}>
                 <button className="btn btn-primary-content w-full">
                   Update
                 </button>

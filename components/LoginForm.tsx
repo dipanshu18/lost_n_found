@@ -19,6 +19,7 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<loginUserType>({
+    reValidateMode: "onChange",
     resolver: zodResolver(loginUserSchema),
   });
 
@@ -62,9 +63,8 @@ export default function LoginForm() {
               <input
                 type="email"
                 placeholder="email"
-                {...register("email")}
+                {...register("email", { required: true })}
                 className="input input-bordered"
-                required
               />
               {errors && (
                 <span className="text-rose-700">{errors.email?.message}</span>
@@ -77,9 +77,8 @@ export default function LoginForm() {
               <input
                 type="password"
                 placeholder="password"
-                {...register("password")}
+                {...register("password", { required: true })}
                 className="input input-bordered"
-                required
               />
               {errors && (
                 <span className="text-rose-700">

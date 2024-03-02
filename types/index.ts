@@ -7,7 +7,7 @@ export const signupUserSchema = z.object({
   phoneNo: z
     .string()
     .min(10, { message: "Phone no must be 10 digits long" })
-    .max(10, { message: "Phone no must be minimum 10 digits long" }),
+    .max(10, { message: "Phone no must be 10 digits long" }),
   email: z.string().email(),
   password: z
     .string()
@@ -24,12 +24,18 @@ export const loginUserSchema = z.object({
 
 export type loginUserType = z.infer<typeof loginUserSchema>;
 
-export type updateUserType = Partial<typeof signupUserSchema>;
+export const updateUserSchema = signupUserSchema.partial().extend({
+  password: z.string().optional(),
+});
+
+export type updateUserType = z.infer<typeof updateUserSchema>;
 
 export const userProfileSchema = z.object({
+  id: z.string(),
   name: z.string(),
   phoneNo: z.string(),
   email: z.string().email(),
+  password: z.string(),
 });
 
 export type userProfileType = z.infer<typeof userProfileSchema>;

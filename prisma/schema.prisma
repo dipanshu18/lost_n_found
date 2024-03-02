@@ -26,6 +26,7 @@ model LostItemPost {
   lostLocation         String
   imageUrl             String
   verificationQuestion String
+  answered             Boolean          @default(false)
   response             FinderResponse[]
   user                 User             @relation(fields: [userId], references: [id])
   userId               String
@@ -47,6 +48,7 @@ model FoundItemPost {
   description          String
   lostLocation         String
   verificationQuestion String
+  answered             Boolean         @default(false)
   response             OwnerResponse[]
   imageUrl             String
   finder               User            @relation(fields: [finderId], references: [id])
